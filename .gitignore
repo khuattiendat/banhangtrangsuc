@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+/obj
+/Properties
+/Microsoft.Office.Interop.Excel.15.0.4795.1001
 /.pnp
 .pnp.js
 .env
