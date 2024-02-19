@@ -84,9 +84,15 @@ namespace banhangtrangsuc.handle_logic
         {
             return Connect.Instance.ExecuteQuery("SELECT tk.id, tk.ten, tk.sdt, tk.gioitinh, tk.ngaysinh, tk.diachi, tk.email FROM dbo.taikhoan as tk");
         }
-        public bool checkUpdateAccount(string email, int Id)
+        public bool checkUpdateEmailAccount(string email, int Id)
         {
-            string query = string.Format("SELECT * FROM dbo.taikhoan WHERE email = N'{0}' AND id = {1}", email, Id);
+            string query = string.Format("SELECT * FROM dbo.taikhoan WHERE email = N'{0}' AND id != {1}", email, Id);
+            DataTable result = Connect.Instance.ExecuteQuery(query);
+            return result.Rows.Count > 0;
+        }
+        public bool checkUpdatePhoneAccount(string phone, int Id)
+        {
+            string query = string.Format("SELECT * FROM dbo.taikhoan WHERE sdt = N'{0}' AND id != {1}", phone, Id);
             DataTable result = Connect.Instance.ExecuteQuery(query);
             return result.Rows.Count > 0;
         }
@@ -131,29 +137,20 @@ namespace banhangtrangsuc.handle_logic
         {
             try
             {
-                if (checkUpdateAccount(email, id) == true)
+                if (checkUpdateEmailAccount(email, id))
                 {
-                    string query = string.Format("UPDATE dbo.taikhoan SET ten = N'{1}',ngaysinh = N'{2}',gioitinh = N'{3}' ,diachi = N'{4}', sdt = N'{5}' WHERE id = N'{0}'", id, name, ngaysinh, gender, address, phone);
-                    int result = Connect.Instance.ExecuteNonQuery(query);
-                    return result > 0;
+                    MessageBox.Show("Email này đã tồn tại !!!");
+                    return false;
                 }
-                else
+                if (checkUpdatePhoneAccount(phone, id))
                 {
-                    if (checkEmail(email) == true)
-                    {
-                        MessageBox.Show("Email đã tồn tại !!!");
-                        return false;
-                    }
-                    if (checkPhone(phone) == true)
-                    {
-                        MessageBox.Show("Số điện thoại đã tồn tại !!!");
-                        return false;
-                    }
-                    string query = string.Format("UPDATE dbo.taikhoan SET ten = N'{1}',ngaysinh = N'{2}',gioitinh = N'{3}' ,diachi = N'{4}', sdt = N'{6}', email = N'{7}' WHERE id = N'{0}'", id, name, ngaysinh, gender, address, phone, email);
-                    int result = Connect.Instance.ExecuteNonQuery(query);
+                    MessageBox.Show("Số điện thoại này đã tồn tại !!!");
+                    return false;
+                }
+                string query = string.Format("UPDATE dbo.taikhoan SET ten = N'{1}',ngaysinh = N'{2}',gioitinh = N'{3}' ,diachi = N'{4}', sdt = N'{5}', email = N'{6}' WHERE id = N'{0}'", id, name, ngaysinh, gender, address, phone, email);
+                int result = Connect.Instance.ExecuteNonQuery(query);
 
-                    return result > 0;
-                }
+                return result > 0;
 
             }
             catch (SqlException ex)

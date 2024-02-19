@@ -93,7 +93,7 @@ namespace banhangtrangsuc.handle_logic
         }
         public bool checkUpdateProduct(string name, int Id)
         {
-            string query = string.Format("SELECT * FROM dbo.sanpham WHERE ten = N'{0}' AND id = {1}", name, Id);
+            string query = string.Format("SELECT * FROM dbo.sanpham WHERE ten = N'{0}' AND id != {1}", name, Id);
             DataTable result = Connect.Instance.ExecuteQuery(query);
             return result.Rows.Count > 0;
         }
@@ -121,23 +121,28 @@ namespace banhangtrangsuc.handle_logic
         {
             try
             {
+                //if (checkUpdateProduct(name, idsp) == true)
+                //{
+                //    string query = string.Format("UPDATE dbo.sanpham SET idloaisp = {0}, gia = {1}, tonkho = {2} WHERE id = {3}", idcategory, price, soluong, idsp);
+                //    int result = Connect.Instance.ExecuteNonQuery(query);
+                //    return result > 0;
+                //}
+                //else
+                //{
+                //if (checkInsertProduct(name) == true)
+                //{
+                //    MessageBox.Show("Sản phẩm này đã có !!!");
+                //    return false;
+                //}
                 if (checkUpdateProduct(name, idsp) == true)
                 {
-                    string query = string.Format("UPDATE dbo.sanpham SET idloaisp = {0}, gia = {1}, tonkho = {2} WHERE id = {3}", idcategory, price, soluong, idsp);
-                    int result = Connect.Instance.ExecuteNonQuery(query);
-                    return result > 0;
+                    MessageBox.Show("Sản phẩm này đã có !!!");
+                    return false;
                 }
-                else
-                {
-                    if (checkInsertProduct(name) == true)
-                    {
-                        MessageBox.Show("Sản phẩm này đã có !!!");
-                        return false;
-                    }
-                    string query = string.Format("UPDATE dbo.sanpham SET ten = N'{0}', idloaisp = {1}, gia = {2}, tonkho = {3} WHERE id = {4}", name, idcategory, price, soluong, idsp);
-                    int result = Connect.Instance.ExecuteNonQuery(query);
-                    return result > 0;
-                }
+                string query = string.Format("UPDATE dbo.sanpham SET ten = N'{0}', idloaisp = {1}, gia = {2}, tonkho = {3} WHERE id = {4}", name, idcategory, price, soluong, idsp);
+                int result = Connect.Instance.ExecuteNonQuery(query);
+                return result > 0;
+                //}
             }
             catch (SqlException ex)
             {

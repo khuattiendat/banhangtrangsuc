@@ -33,6 +33,7 @@ create table loaisp
 	id int identity primary key,
 	tenloai nvarchar(50) not null unique
 )
+select * from loaisp where tenloai = N'Nhẫn' and id != 2
 go
 -- bang san pham
 create table sanpham

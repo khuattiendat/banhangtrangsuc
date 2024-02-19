@@ -53,7 +53,7 @@ namespace banhangtrangsuc.handle_logic
         }
         public bool checkUpdateCategory(string name, int Id)
         {
-            string query = string.Format("SELECT * FROM dbo.loaisp WHERE tenloai = N'{0}' AND id = {1}", name, Id);
+            string query = string.Format("SELECT * FROM dbo.loaisp WHERE tenloai = N'{0}' AND id != {1}", name, Id);
             DataTable result = Connect.Instance.ExecuteQuery(query);
             return result.Rows.Count > 0;
         }
@@ -86,9 +86,9 @@ namespace banhangtrangsuc.handle_logic
         }
         public bool UpdateCategory(int id, string name)// 
         {
-            if (checkInsertCategory(name))
+            if (checkUpdateCategory(name, id))
             {
-                MessageBox.Show("Loại sản phẩm này đã có !!!");
+                MessageBox.Show("Loại sản phẩm này đã tồn tại !!!");
                 return false;
             }
             string query = string.Format("UPDATE dbo.loaisp SET tenloai = N'{0}' WHERE id = {1}", name, id);
